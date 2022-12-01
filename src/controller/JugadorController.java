@@ -42,5 +42,8 @@ public class JugadorController extends RegistroControllerBase<Jugador> {
         super.eliminarRegistro(id);
     }
     
+    public Jugador buscarRegistroTelefono(String telefono){      
+        return  service.buscarRegistro(telefono);
+    }
 
 }
