@@ -19,11 +19,29 @@ public class UsuarioModelImpl implements IUsuarioModel {
         try {
             conexion = new Conexion();//se establecen los valores de la bd
             connection = conexion.getConnection();// se obtiene la conexión a la bd
-            String query = "CALL insertarUsuario('" + usuario.getNombre() +"','"+usuario.getPassword()+ "')";
+            int id_jugador = usuario.getId_jugador();;
+            String query = "CALL insertarUsuario('" + usuario.getNombre() + "','" + usuario.getPassword() + "','" + id_jugador + "')";
             stm = connection.createStatement();
             stm.execute(query);
             stm.close();
             connection.close();
+            if (usuario.getId_usuario() < 0) {
+                try {
+                    Conexion conexion1 = new Conexion();
+                    Connection connection1 = conexion1.getConnection();
+                    Usuario usuario1 = this.buscarRegistro(usuario.getNombre());
+                    int idUsuario = usuario1.getId_usuario();
+                    int idRol = Math.abs(usuario.getId_usuario());
+                    String query1 = "CALL insertar_Usuario_rol('" + idUsuario + "','" + idRol + "')";
+                    Statement stm1 = connection1.createStatement();
+                    stm1.execute(query1);
+                    stm1.close();
+                    connection1.close();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                }
+
+            }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -98,7 +116,7 @@ public class UsuarioModelImpl implements IUsuarioModel {
         try {
             conexion = new Conexion();//se establecen los valores de la bd
             connection = conexion.getConnection();// se obtiene la conexión a la bd
-            String query = "CALL actualizarUsuario('" + usuario.getNombre()+"','"+ usuario.getId_usuario()+ "')";
+            String query = "CALL actualizarUsuario('" + usuario.getNombre() + "','" + usuario.getId_usuario() + "')";
             stm = connection.createStatement();
             stm.execute(query);
             connection.close();
@@ -114,14 +132,14 @@ public class UsuarioModelImpl implements IUsuarioModel {
             ResultSet rs;
             conexion = new Conexion();//se establecen los valores de la bd
             connection = conexion.getConnection();// se obtiene la conexión a la bd
-            String query = "CALL buscarUsuarioNC('" + user.getNombre() +"','"+user.getPassword()+ "')";
+            int aux=user.getId_jugador();
+            String query = "CALL buscarUsuarioNCP('" + user.getNombre() + "','" + user.getPassword() +"','" + aux +"')";
             stm = connection.createStatement();
             rs = stm.executeQuery(query);
             rs.next();
-            usuario.setId_usuario(rs.getInt(1));// o se pude hacer usuario.setId_usuario(rs.getInt("idUsuario"));
-            usuario.setNombre(rs.getString(2));// o se pude hacer usuario.setNombre(rs.getString("usuario"));
-            usuario.setPassword(rs.getString(3));// o se pude hacer usuario.setNombre(rs.getString("usuario"));
-            System.out.println(usuario.getId()+usuario.getNombre());
+            usuario.setId_usuario(rs.getInt(3));// o se pude hacer usuario.setId_usuario(rs.getInt("idUsuario"));
+            usuario.setNombre(rs.getString(1));// o se pude hacer usuario.setNombre(rs.getString("usuario"));
+            usuario.setPassword(rs.getString(2));// o se pude hacer usuario.setNombre(rs.getString("usuario"));
             stm.close();
             connection.close();
             return usuario;
@@ -141,7 +159,7 @@ public class UsuarioModelImpl implements IUsuarioModel {
             ResultSet rs;
             conexion = new Conexion();//se establecen los valores de la bd
             connection = conexion.getConnection();// se obtiene la conexión a la bd
-            String query = "CALL buscarUsuarioNombre('" + nombre +"')";
+            String query = "CALL buscarUsuarioNombre('" + nombre + "')";
             stm = connection.createStatement();
             rs = stm.executeQuery(query);
             rs.next();

@@ -41,5 +41,6 @@ public class JugadorController extends RegistroControllerBase<Jugador> {
     public void eliminarRegistro(int id) {
         super.eliminarRegistro(id);
     }
+    
 
 }

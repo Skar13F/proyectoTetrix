@@ -49,7 +49,7 @@ public class JugadorModelImpl implements IJugadorModel {
                 jugador.setId_jugador(rs.getInt(1));// o se pude hacer jugador.setIdJugador(rs.getInt("idJugador"));
                 jugador.setNombre(rs.getString(2));// o se pude hacer jugador.setJugador(rs.getString("jugador"));
                 jugador.setEdad(Integer.parseInt(rs.getString(3)));
-                jugador.setSexo(rs.getString(4));
+                //jugador.setSexo(rs.getString(4));
                 jugador.setTelefono(rs.getString(5));
                 listaJugador.add(jugador);
             }
@@ -77,18 +77,21 @@ public class JugadorModelImpl implements IJugadorModel {
     }
 
     @Override
-    public Jugador buscarRegistro(int id) {
+    public Jugador buscarRegistro(String telefono) {
         try {
             Jugador jugador = new Jugador();
             ResultSet rs;
             conexion = new Conexion();//se establecen los valores de la bd
             connection = conexion.getConnection();// se obtiene la conexión a la bd
-            String query = "SELECT * FROM Jugador where id_jugador=" + id;
+            String query = "SELECT * FROM Jugador where id_jugador=" + telefono;
             stm = connection.createStatement();
             rs = stm.executeQuery(query);
             rs.next();
             jugador.setId_jugador(rs.getInt(1));// o se pude hacer jugador.setIdJugador(rs.getInt("idJugador"));
             jugador.setNombre(rs.getString(2));// o se pude hacer jugador.setJugador(rs.getString("jugador"));
+            jugador.setEdad(rs.getInt(3));
+            //jugador.setSexo(rs.getString(4));
+            jugador.setTelefono(rs.getString(5));
             stm.close();
             connection.close();
             return jugador;

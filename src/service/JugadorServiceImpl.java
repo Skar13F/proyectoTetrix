@@ -26,13 +26,18 @@ public class JugadorServiceImpl implements IJugadorService{
     }
 
     @Override
-    public Jugador buscarRegistro(int id) {
-        return model.buscarRegistro(id);
+    public Jugador buscarRegistro(String telefono) {
+        return model.buscarRegistro(telefono);
     }
 
     @Override
     public void actualizarRegistro(Jugador registro) {
         model.actualizarRegistro(registro);
+    }
+
+    @Override
+    public Jugador buscarRegistro(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }
